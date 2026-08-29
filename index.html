@@ -1,267 +1,1593 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cyber-teal">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#09111f">
-  <title>Anugraha Siju | Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#060a12">
+  <meta name="color-scheme" content="dark">
+  <title>Anugraha Siju | Biomedical & Embedded Systems Engineer</title>
   <meta
     name="description"
-    content="Animated portfolio for Anugraha Siju, an Electronics and Biomedical Engineering student building embedded and rehabilitation-focused systems."
+    content="Portfolio of Anugraha Siju - Electronics & Biomedical Engineering specialist creating intelligent rehabilitation devices, kinematic telemetry hardware, and embedded firmware."
   >
+  <meta name="keywords" content="Anugraha Siju, Biomedical Engineering, Embedded Systems, ESP32, Rehabilitation Tech, Kinematics, IMU Sensors, IoT, PCB Design, Portfolio">
+  <meta name="author" content="Anugraha Siju">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Anugraha Siju | Biomedical & Embedded Systems Engineer">
+  <meta property="og:description" content="Pioneering intelligent rehabilitation devices, kinematic telemetry, and embedded biomedical hardware.">
+  <meta property="og:image" content="./Profile.jpeg">
+
+  <!-- Preconnect Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="./styles.css">
+
+  <!-- External Modern Animation Libraries -->
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="./styles.css?v=5.0">
 </head>
 <body>
-  <div class="scroll-progress" aria-hidden="true">
-    <span class="scroll-progress-bar"></span>
+  <!-- Scroll Progress Indicator Bar -->
+  <div class="scroll-progress-container" aria-hidden="true">
+    <div class="scroll-progress-bar" id="progressBar"></div>
   </div>
-  <div class="ambient-stage" aria-hidden="true">
-    <div class="ambient-glow ambient-glow-a"></div>
-    <div class="ambient-glow ambient-glow-b"></div>
-    <div class="ambient-grid"></div>
-    <div class="particle-field"></div>
+
+  <!-- Custom Cursor & Fluid Trails System (Desktop Only) -->
+  <canvas id="cursorTrailCanvas" aria-hidden="true"></canvas>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true">
+    <span class="cursor-tag" id="cursorTag"></span>
   </div>
-  <div class="page-shell">
-    <header class="topbar">
-      <a class="brand" href="#hero">AS</a>
-      <nav class="nav">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#leadership">Leadership</a>
-        <a href="#education">Education</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <a class="button button-ghost" href="./AnugrahaSiju_CV_2ndYear%20(2).pdf" download>Resume</a>
+
+  <!-- Ambient Dynamic Canvas Background (Hardware-Accelerated) -->
+  <div class="ambient-canvas-wrapper" aria-hidden="true">
+    <canvas id="ambientCanvas"></canvas>
+    <div class="ambient-vignette"></div>
+    <div class="ambient-grid-overlay"></div>
+  </div>
+
+  <!-- Main Application Container -->
+  <div class="app-shell">
+
+    <!-- Floating Frosted Glass Navigation Header -->
+    <header class="navbar-wrapper" id="mainHeader">
+      <div class="navbar-container">
+        <a href="#hero" class="navbar-brand" aria-label="Go to top of page">
+          <div class="brand-hexagon">
+            <span class="brand-initials">AS</span>
+          </div>
+          <div class="brand-meta">
+            <span class="brand-name">Anugraha Siju</span>
+            <span class="brand-tagline">BTech • Biomedical & Embedded</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="navbar-links" id="navLinks" aria-label="Primary Navigation">
+          <a href="#about" class="nav-item" data-nav="about">About</a>
+          <a href="#projects" class="nav-item" data-nav="projects">Projects</a>
+          <a href="#sandbox" class="nav-item" data-nav="sandbox">Rehab Sandbox</a>
+          <a href="#skills" class="nav-item" data-nav="skills">Skills & Lab</a>
+          <a href="#leadership" class="nav-item" data-nav="leadership">Leadership</a>
+          <a href="#education" class="nav-item" data-nav="education">Education</a>
+          <a href="#contact" class="nav-item" data-nav="contact">Contact</a>
+        </nav>
+
+        <div class="navbar-actions">
+          <!-- Live Theme Picker Dropdown -->
+          <div class="theme-menu-container">
+            <button
+              class="icon-btn theme-btn"
+              id="themeToggleBtn"
+              aria-label="Change Accent Color Theme"
+              title="Change Accent Color"
+            >
+              <i data-lucide="palette"></i>
+            </button>
+            <div class="theme-dropdown" id="themeDropdown" aria-hidden="true">
+              <button class="theme-opt active" data-theme-val="cyber-teal" title="Cyber Teal">
+                <span class="theme-swatch teal-swatch"></span>
+                <span>Cyber Teal</span>
+              </button>
+              <button class="theme-opt" data-theme-val="neon-purple" title="Bio Pulse">
+                <span class="theme-swatch purple-swatch"></span>
+                <span>Bio Pulse</span>
+              </button>
+              <button class="theme-opt" data-theme-val="electric-amber" title="Solar Amber">
+                <span class="theme-swatch amber-swatch"></span>
+                <span>Solar Amber</span>
+              </button>
+              <button class="theme-opt" data-theme-val="emerald-matrix" title="Medical Emerald">
+                <span class="theme-swatch emerald-swatch"></span>
+                <span>Medical Emerald</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Action Resume CTA -->
+          <a
+            href="./AnugrahaSiju_CV_2ndYear%20(2).pdf"
+            download="Anugraha_Siju_CV.pdf"
+            class="btn btn-primary btn-sm resume-cta"
+            id="headerResumeBtn"
+          >
+            <i data-lucide="file-down"></i>
+            <span>Resume</span>
+          </a>
+
+          <!-- Mobile Nav Hamburger Button -->
+          <button
+            class="mobile-toggle"
+            id="mobileToggle"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+          >
+            <span class="bar bar-1"></span>
+            <span class="bar bar-2"></span>
+            <span class="bar bar-3"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation Slide-out Drawer -->
+      <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+        <div class="mobile-drawer-inner">
+          <nav class="mobile-nav">
+            <a href="#about" class="mobile-link"><i data-lucide="user"></i> About & Philosophy</a>
+            <a href="#projects" class="mobile-link"><i data-lucide="layers"></i> Flagship Projects</a>
+            <a href="#sandbox" class="mobile-link"><i data-lucide="activity"></i> Rehab Telemetry Sandbox</a>
+            <a href="#skills" class="mobile-link"><i data-lucide="cpu"></i> Skills & Workbench</a>
+            <a href="#leadership" class="mobile-link"><i data-lucide="sparkles"></i> Leadership & Roles</a>
+            <a href="#education" class="mobile-link"><i data-lucide="graduation-cap"></i> Education & Honors</a>
+            <a href="#contact" class="mobile-link"><i data-lucide="send"></i> Get In Touch</a>
+          </nav>
+          <div class="mobile-drawer-footer">
+            <a href="./AnugrahaSiju_CV_2ndYear%20(2).pdf" download="Anugraha_Siju_CV.pdf" class="btn btn-primary w-full">
+              <i data-lucide="file-text"></i> Download Full Resume
+            </a>
+            <div class="mobile-socials">
+              <a href="https://www.linkedin.com/in/anugraha-siju/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                <i data-lucide="linkedin"></i>
+              </a>
+              <a href="mailto:anugrahasiju11@gmail.com" aria-label="Email">
+                <i data-lucide="mail"></i>
+              </a>
+              <a href="tel:+919037790898" aria-label="Phone">
+                <i data-lucide="phone"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
 
-    <main>
-      <section class="hero reveal" id="hero" data-reveal="up">
-        <div class="hero-copy">
-          <p class="eyebrow reveal" data-reveal="left">Embedded Systems | Biomedical Engineering | Smart Rehab Interfaces</p>
-          <h1 class="reveal" data-reveal="up" data-delay="0.08">Anugraha Siju</h1>
-          <p class="hero-title reveal" data-reveal="up" data-delay="0.16">BTech Student (EBE) shaping data-driven healthcare devices with electronics, sensing, and disciplined execution.</p>
-          <p class="hero-text reveal" data-reveal="up" data-delay="0.24">
-            I build intelligent systems at the intersection of embedded hardware and rehabilitation technology,
-            with a focus on measurable progress, practical interfaces, and reliable real-world performance.
-          </p>
-          <div class="hero-actions reveal" data-reveal="up" data-delay="0.32">
-            <a class="button" href="#projects">View Projects</a>
-            <a class="button button-ghost" href="https://www.linkedin.com/in/anugraha-siju/" target="_blank" rel="noreferrer">LinkedIn</a>
+    <!-- Main Content Stream -->
+    <main id="mainContent" class="overflow-x-hidden w-full max-w-full">
+
+      <!-- ========================================================
+           HERO SECTION: Cinematic Biomedical & Embedded Intro
+           ======================================================== -->
+      <section class="hero-section" id="hero">
+        <div class="hero-container">
+          <div class="hero-content">
+            
+            <!-- Availability Status Pill -->
+            <div class="hero-status-wrap gsap-hero-elem">
+              <div class="status-pill">
+                <span class="status-ping">
+                  <span class="ping-wave"></span>
+                  <span class="ping-dot"></span>
+                </span>
+                <span class="status-text">Available for Biomedical & Embedded R&D Roles</span>
+              </div>
+            </div>
+
+            <!-- Kinetic Headline (Strict 2-Line Flow) -->
+            <div class="hero-heading-block gsap-hero-elem">
+              <p class="hero-eyebrow">
+                <span class="eyebrow-accent">//</span> ELECTRONICS & BIOMEDICAL ENGINEERING
+              </p>
+              <h1 class="hero-title">
+                Architecting intelligent <span class="text-gradient">rehabilitation systems</span> & telemetry.
+              </h1>
+              <div class="hero-subline">
+                <span class="mono-text text-accent">Anugraha Siju</span>
+                <span class="subline-divider">•</span>
+                <span>Bridging physiological biosignals, embedded firmware, and real-time kinematic recovery.</span>
+              </div>
+            </div>
+
+            <!-- Action CTA Group -->
+            <div class="hero-cta-group gsap-hero-elem">
+              <a href="#projects" class="btn btn-primary btn-lg magnetic-btn">
+                <i data-lucide="layers"></i>
+                <span>Explore Projects</span>
+                <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+              </a>
+              <a href="#sandbox" class="btn btn-secondary btn-lg magnetic-btn">
+                <i data-lucide="activity"></i>
+                <span>Live Rehab Sandbox</span>
+              </a>
+              <a href="https://www.linkedin.com/in/anugraha-siju/" target="_blank" rel="noreferrer" class="btn btn-ghost btn-lg" aria-label="LinkedIn Profile">
+                <i data-lucide="linkedin"></i>
+                <span>LinkedIn</span>
+              </a>
+            </div>
+
+            <!-- Key Engineering Metrics Strip -->
+            <div class="hero-metrics-strip gsap-hero-elem">
+              <div class="metric-card">
+                <div class="metric-val-row">
+                  <span class="metric-number" data-count="8.93">8.93</span>
+                  <span class="metric-unit">/10</span>
+                </div>
+                <div class="metric-label">Engineering CGPA</div>
+                <div class="metric-sub">Adi Shankara (KTU)</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-val-row">
+                  <span class="metric-number" data-count="2">2</span>
+                  <span class="metric-unit">Active</span>
+                </div>
+                <div class="metric-label">Smart Rehab Devices</div>
+                <div class="metric-sub">ESP32 + Kinematic Sensors</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-val-row">
+                  <span class="metric-number" data-count="99.08">99.08</span>
+                  <span class="metric-unit">%</span>
+                </div>
+                <div class="metric-label">Academic Distinction</div>
+                <div class="metric-sub">State Level Top Score</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-val-row">
+                  <span class="metric-number" data-count="100">100</span>
+                  <span class="metric-unit">Hz</span>
+                </div>
+                <div class="metric-label">Telemetry Sampling</div>
+                <div class="metric-sub">Low-Latency IMU Fusion</div>
+              </div>
+            </div>
           </div>
-          <div class="hero-stats">
-            <article class="reveal tilt-card" data-reveal="up" data-delay="0.38">
-              <strong>8.93</strong>
-              <span>CGPA</span>
+
+          <!-- Hero Visual: Holographic Profile with Live Telemetry Feeds -->
+          <div class="hero-interactive-stage gsap-hero-visual">
+            <div class="holo-card" id="holoCard">
+              <div class="holo-glow-ring"></div>
+
+              <div class="holo-avatar-wrap">
+                <img
+                  src="./Profile.jpeg"
+                  alt="Anugraha Siju - Electronics and Biomedical Engineer"
+                  class="holo-avatar"
+                  loading="eager"
+                >
+                <div class="holo-avatar-scanline"></div>
+                <div class="holo-corner corner-tl"></div>
+                <div class="holo-corner corner-tr"></div>
+                <div class="holo-corner corner-bl"></div>
+                <div class="holo-corner corner-br"></div>
+              </div>
+
+              <!-- Live ESP32 Telemetry Badge -->
+              <div class="telemetry-badge telemetry-top">
+                <div class="badge-header">
+                  <span class="telemetry-dot live-pulse"></span>
+                  <span class="telemetry-title">ESP32 TELEMETRY STREAM</span>
+                </div>
+                <div class="telemetry-body">
+                  <div class="telemetry-stat">
+                    <span class="stat-k">SAMPLING</span>
+                    <span class="stat-v mono-text">100 Hz</span>
+                  </div>
+                  <div class="telemetry-stat">
+                    <span class="stat-k">LATENCY</span>
+                    <span class="stat-v mono-text text-accent">&lt; 12ms</span>
+                  </div>
+                  <div class="telemetry-stat">
+                    <span class="stat-k">ACCURACY</span>
+                    <span class="stat-v mono-text">±0.5° ROM</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mini Bio-Signal Realtime Scope Badge -->
+              <div class="telemetry-badge telemetry-bottom">
+                <div class="badge-header">
+                  <i data-lucide="heart-pulse" class="telemetry-icon pulse-beat"></i>
+                  <span class="telemetry-title">BIO-SIGNAL FRONTEND</span>
+                  <span class="mono-text badge-tag">ACTIVE</span>
+                </div>
+                <div class="mini-scope-canvas-wrap">
+                  <canvas id="miniHeroScope" width="220" height="42"></canvas>
+                </div>
+                <div class="telemetry-footer-labels">
+                  <span>Filtered ROM Angle: <strong id="heroLiveAngle" class="text-accent">48.2°</strong></span>
+                  <span>SNR: <strong>42 dB</strong></span>
+                </div>
+              </div>
+
+              <!-- Location Badge -->
+              <div class="location-floating-pill">
+                <i data-lucide="map-pin"></i>
+                <span>Aluva, Kerala, IN • UTC +5:30</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scroll Cue -->
+        <a href="#about" class="scroll-cue" aria-label="Scroll down to About section">
+          <span class="scroll-cue-text">EXPLORE ARCHITECTURE</span>
+          <div class="mouse-icon">
+            <span class="mouse-wheel"></span>
+          </div>
+        </a>
+      </section>
+
+      <!-- ========================================================
+           SECTION: Bento Grid About & Engineering DNA
+           ======================================================== -->
+      <section class="section-block" id="about">
+        <div class="section-container">
+          <div class="section-header gsap-reveal">
+            <div class="section-subtitle-tag">
+              <i data-lucide="cpu"></i>
+              <span>ENGINEERING IDENTITY</span>
+            </div>
+            <h2 class="section-title">Built for Precision. Driven by Healthcare Impact.</h2>
+            <p class="section-description">
+              Bridging physiological bio-potentials and silicon-level computation to engineer quantitative, clinical-grade medical hardware.
+            </p>
+          </div>
+
+          <!-- Gapless Bento Grid with grid-auto-flow: dense -->
+          <div class="bento-grid">
+            
+            <!-- Bento 1: Core Mission (8 Cols) -->
+            <div class="bento-card bento-col-8 bento-feature gsap-reveal">
+              <div class="bento-badge">
+                <i data-lucide="sparkles"></i>
+                <span>Core Mission</span>
+              </div>
+              <h3 class="bento-heading">Engineering at the Nexus of Physiological Signals & Silicon</h3>
+              <p class="bento-text">
+                My engineering transforms subjective physical rehabilitation into quantitative, data-rich clinical tracking. By pairing calibrated IMU kinematics with on-device digital filtering on the ESP32, my systems deliver real-time biofeedback, automated Range of Motion (ROM) compliance metrics, and low-latency clinical dashboards.
+              </p>
+              <div class="bento-highlights-row">
+                <div class="highlight-item">
+                  <div class="hi-icon"><i data-lucide="microchip"></i></div>
+                  <div class="hi-info">
+                    <strong>Embedded Firmware</strong>
+                    <span>C/C++, FreeRTOS, ESP-IDF, 8051 Assembly architectures</span>
+                  </div>
+                </div>
+                <div class="highlight-item">
+                  <div class="hi-icon"><i data-lucide="activity"></i></div>
+                  <div class="hi-info">
+                    <strong>Biosignal Acquisition</strong>
+                    <span>EMG, IMU kinematic sensors, ADC filtering & BLE telemetry</span>
+                  </div>
+                </div>
+                <div class="highlight-item">
+                  <div class="hi-icon"><i data-lucide="layout-grid"></i></div>
+                  <div class="hi-info">
+                    <strong>Human-Centric Biofeedback</strong>
+                    <span>Real-time kinematic charts, telemetry monitors & recovery visualizers</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bento 2: Academic Honors Card (4 Cols) -->
+            <div class="bento-card bento-col-4 bento-academics gsap-reveal">
+              <div class="bento-badge">
+                <i data-lucide="award"></i>
+                <span>Academic Distinction</span>
+              </div>
+              <div class="gpa-display">
+                <div class="gpa-ring-wrapper">
+                  <svg class="gpa-svg" viewBox="0 0 100 100">
+                    <circle class="gpa-bg-circle" cx="50" cy="50" r="42"></circle>
+                    <circle class="gpa-fg-circle" cx="50" cy="50" r="42" style="--gpa-dash: 236;"></circle>
+                  </svg>
+                  <div class="gpa-inner-text">
+                    <span class="gpa-big">8.93</span>
+                    <span class="gpa-sub">CGPA</span>
+                  </div>
+                </div>
+              </div>
+              <h4 class="bento-card-title">Top-Tier Academic Discipline</h4>
+              <p class="bento-card-desc">
+                Consistent academic leadership with <strong>99.08% in Higher Secondary</strong> and <strong>99.00% in High School</strong>, backed by rigorous mathematics and analytical problem solving.
+              </p>
+            </div>
+
+            <!-- Bento 3: Hardware Workbench (6 Cols) -->
+            <div class="bento-card bento-col-6 bento-lab gsap-reveal">
+              <div class="bento-badge">
+                <i data-lucide="wrench"></i>
+                <span>Hardware Workbench</span>
+              </div>
+              <h3 class="bento-heading">Lab Instrumentation & Tooling</h3>
+              <p class="bento-text">
+                Hands-on fluency with microcontrollers, analog front-ends, and bench testing instrumentation:
+              </p>
+              <div class="lab-chips-grid">
+                <div class="lab-chip">
+                  <i data-lucide="cpu"></i>
+                  <div>
+                    <strong>ESP32 / ESP8266</strong>
+                    <span>Wi-Fi / BLE 4.2 Telemetry</span>
+                  </div>
+                </div>
+                <div class="lab-chip">
+                  <i data-lucide="compass"></i>
+                  <div>
+                    <strong>MPU6050 / 6-DOF IMU</strong>
+                    <span>Kinematic Sensor Fusion</span>
+                  </div>
+                </div>
+                <div class="lab-chip">
+                  <i data-lucide="zap"></i>
+                  <div>
+                    <strong>ADS1115 & Op-Amps</strong>
+                    <span>16-bit ADC & Bio-Filters</span>
+                  </div>
+                </div>
+                <div class="lab-chip">
+                  <i data-lucide="layers"></i>
+                  <div>
+                    <strong>Proteus & KiCad</strong>
+                    <span>Schematic & PCB Prototyping</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bento 4: Leadership & Impact (6 Cols) -->
+            <div class="bento-card bento-col-6 bento-leadership gsap-reveal">
+              <div class="bento-badge">
+                <i data-lucide="users"></i>
+                <span>Organizational Leadership</span>
+              </div>
+              <h3 class="bento-heading">Leadership with Technical Execution</h3>
+              <p class="bento-text">
+                Uniting technical domain depth with executive governance and event management across IEEE and BMESI:
+              </p>
+              <div class="roles-mini-list">
+                <div class="role-pill">
+                  <div class="role-pill-badge">IEEE</div>
+                  <div class="role-pill-content">
+                    <strong>Content Co-Lead • Executive Committee</strong>
+                    <span>Technical curriculum design, symposium curation & public address</span>
+                  </div>
+                </div>
+                <div class="role-pill">
+                  <div class="role-pill-badge">BMESI</div>
+                  <div class="role-pill-content">
+                    <strong>Joint Secretary • Student Chapter</strong>
+                    <span>Biomedical tech fests, clinician panels & inter-college workshops</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECTION: Flagship Engineering Projects
+           ======================================================== -->
+      <section class="section-block" id="projects">
+        <div class="section-container">
+          <div class="section-header gsap-reveal">
+            <div class="section-subtitle-tag">
+              <i data-lucide="folder-git-2"></i>
+              <span>PORTFOLIO SHOWCASE</span>
+            </div>
+            <h2 class="section-title">Flagship Embedded & Biomedical Projects</h2>
+            <p class="section-description">
+              Engineered hardware systems spanning sensor signal conditioning, digital filtering, and real-time telemetry visualizers.
+            </p>
+          </div>
+
+          <!-- Project Filter Tabs -->
+          <div class="project-filters gsap-reveal" role="tablist" aria-label="Project Categories">
+            <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">
+              <i data-lucide="grid"></i> All Engineering Works (4)
+            </button>
+            <button class="filter-btn" data-filter="rehab" role="tab" aria-selected="false">
+              <i data-lucide="activity"></i> Rehabilitation Tech
+            </button>
+            <button class="filter-btn" data-filter="embedded" role="tab" aria-selected="false">
+              <i data-lucide="cpu"></i> Embedded Systems & IoT
+            </button>
+            <button class="filter-btn" data-filter="biomed" role="tab" aria-selected="false">
+              <i data-lucide="heart-pulse"></i> Biosensing & Instruments
+            </button>
+          </div>
+
+          <!-- Project Cards Grid -->
+          <div class="projects-master-grid" id="projectsGrid">
+
+            <!-- PROJECT 1: Flagship Quantitative Physiotherapy Tracker -->
+            <article class="project-full-card gsap-reveal" data-category="rehab embedded biomed">
+              <div class="project-card-header">
+                <div class="project-meta-badges">
+                  <span class="badge badge-accent">
+                    <span class="badge-dot"></span> Flagship R&D Prototype
+                  </span>
+                  <span class="badge badge-outline">Active Engineering (2026)</span>
+                  <span class="badge badge-category">Rehabilitation IoT</span>
+                </div>
+                <h3 class="project-title">
+                  ESP32-Based Quantitative Physiotherapy Progress Tracker
+                </h3>
+                <p class="project-subtitle">
+                  Real-time joint range-of-motion (ROM) telemetry system measuring angular velocity, exercise repetitions, and kinematic deviation for clinical rehabilitation.
+                </p>
+              </div>
+
+              <div class="project-card-body">
+                <div class="project-card-info">
+                  <h4 class="info-block-heading"><i data-lucide="terminal"></i> System Architecture & Capabilities</h4>
+                  <ul class="project-features-list">
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>6-DOF Kinematic Sensor Fusion:</strong> Integrates calibrated MPU6050 IMU with digital low-pass filtering (DLPF) and complementary pitch/roll algorithms to calculate joint angles with ±0.5° accuracy.
+                      </div>
+                    </li>
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Low-Latency Wireless Telemetry:</strong> Transmits continuous joint trajectory stream over ESP32 BLE and WebSockets to clinician dashboards at 100 Hz update frequency.
+                      </div>
+                    </li>
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Automated Score & Smoothness Engine:</strong> Computes rehabilitation compliance rate, angular velocity symmetry, and jerk-smoothness indexes for recovery benchmarking.
+                      </div>
+                    </li>
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Interactive Visual Biofeedback:</strong> Real-time patient interface with dynamic progress gauges, target boundary warnings, and session replay charts.
+                      </div>
+                    </li>
+                  </ul>
+
+                  <div class="tech-stack-row">
+                    <span class="tech-tag"><i data-lucide="cpu"></i> ESP32 MCU</span>
+                    <span class="tech-tag"><i data-lucide="compass"></i> MPU6050 IMU</span>
+                    <span class="tech-tag"><i data-lucide="code-2"></i> Embedded C / C++</span>
+                    <span class="tech-tag"><i data-lucide="radio"></i> BLE / WebSockets</span>
+                    <span class="tech-tag"><i data-lucide="activity"></i> Kinematic Dashboard</span>
+                  </div>
+                </div>
+
+                <!-- Interactive Preview Dial Box -->
+                <div class="project-card-preview">
+                  <div class="interactive-diagram-box">
+                    <div class="diagram-box-header">
+                      <span class="mono-text">// ESP32_SENSOR_STREAM_OUTPUT</span>
+                      <span class="status-live-tag">CONNECTED</span>
+                    </div>
+
+                    <div class="card-sim-viewport">
+                      <div class="sim-angle-dial">
+                        <svg class="dial-svg" viewBox="0 0 160 160">
+                          <circle class="dial-track" cx="80" cy="80" r="65"></circle>
+                          <circle class="dial-fill" id="cardDialFill" cx="80" cy="80" r="65"></circle>
+                        </svg>
+                        <div class="dial-center">
+                          <span class="dial-value" id="cardDialValue">72°</span>
+                          <span class="dial-label">FLEXION</span>
+                        </div>
+                      </div>
+
+                      <div class="sim-readouts">
+                        <div class="readout-item">
+                          <span class="r-label">TARGET ROM:</span>
+                          <span class="r-val mono-text">0° - 145°</span>
+                        </div>
+                        <div class="readout-item">
+                          <span class="r-label">ANGULAR VEL:</span>
+                          <span class="r-val mono-text text-accent" id="cardVelVal">34.8 °/s</span>
+                        </div>
+                        <div class="readout-item">
+                          <span class="r-label">REPETITIONS:</span>
+                          <span class="r-val mono-text">14 / 20</span>
+                        </div>
+                        <div class="readout-item">
+                          <span class="r-label">COMPLIANCE:</span>
+                          <span class="r-val mono-text text-accent">96.4%</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="diagram-footer-actions">
+                      <a href="#sandbox" class="btn btn-secondary btn-sm w-full">
+                        <i data-lucide="play"></i> Open Interactive Rehab Sandbox
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </article>
-            <article class="reveal tilt-card" data-reveal="up" data-delay="0.46">
-              <strong>2</strong>
-              <span>Active Rehab Projects</span>
+
+            <!-- PROJECT 2: Rehabilitation Exercise Monitoring Device -->
+            <article class="project-full-card gsap-reveal" data-category="rehab embedded">
+              <div class="project-card-header">
+                <div class="project-meta-badges">
+                  <span class="badge badge-accent">Device Hardware</span>
+                  <span class="badge badge-outline">In Progress</span>
+                  <span class="badge badge-category">Biomedical IoT</span>
+                </div>
+                <h3 class="project-title">
+                  ESP32-Based Rehabilitation Exercise Monitoring Device
+                </h3>
+                <p class="project-subtitle">
+                  Wearable hardware unit capturing patient posture, cadence, and exercise adherence for structured at-home physical therapy protocols.
+                </p>
+              </div>
+
+              <div class="project-card-body">
+                <div class="project-card-info">
+                  <h4 class="info-block-heading"><i data-lucide="sliders"></i> Hardware Highlights & Sensing Logic</h4>
+                  <ul class="project-features-list">
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Wearable Ergonomic Enclosure:</strong> Designed around compact form factor with strapped multi-sensor nodes for limb attachment without impeding natural joint mobility.
+                      </div>
+                    </li>
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Adaptive Feedback Mechanism:</strong> Incorporates visual OLED indicators and haptic vibration feedback to guide patient on exercise speed and correct posture boundaries.
+                      </div>
+                    </li>
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Power Optimization:</strong> Deep-sleep cycling between exercise intervals to deliver multi-day rehabilitation tracking on a single LiPo cell.
+                      </div>
+                    </li>
+                  </ul>
+
+                  <div class="tech-stack-row">
+                    <span class="tech-tag"><i data-lucide="cpu"></i> ESP32 SoC</span>
+                    <span class="tech-tag"><i data-lucide="battery-charging"></i> LiPo Power Mgmt</span>
+                    <span class="tech-tag"><i data-lucide="vibrate"></i> Haptic Alerts</span>
+                    <span class="tech-tag"><i data-lucide="monitor"></i> I2C OLED Display</span>
+                  </div>
+                </div>
+
+                <div class="project-card-preview">
+                  <div class="spec-table-box">
+                    <div class="spec-table-header">
+                      <i data-lucide="clipboard-list"></i>
+                      <span>Hardware Specifications</span>
+                    </div>
+                    <div class="spec-grid">
+                      <div class="spec-row">
+                        <span class="spec-name">Processor:</span>
+                        <span class="spec-val mono-text">Tensilica Xtensa Dual-Core 240MHz</span>
+                      </div>
+                      <div class="spec-row">
+                        <span class="spec-name">Sampling Rate:</span>
+                        <span class="spec-val mono-text">50 - 200 Hz Configurable</span>
+                      </div>
+                      <div class="spec-row">
+                        <span class="spec-name">Communication:</span>
+                        <span class="spec-val mono-text">BLE 4.2 / 2.4GHz Wi-Fi</span>
+                      </div>
+                      <div class="spec-row">
+                        <span class="spec-name">Sensors:</span>
+                        <span class="spec-val mono-text">IMU (Gyro/Accel), Flex Strain</span>
+                      </div>
+                      <div class="spec-row">
+                        <span class="spec-name">Power Draw:</span>
+                        <span class="spec-val mono-text">~45mA Active, &lt;10uA Deep Sleep</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </article>
-            <article class="reveal tilt-card" data-reveal="up" data-delay="0.54">
-              <strong>99%+</strong>
-              <span>School Academic Scores</span>
+
+            <!-- PROJECT 3: Bio-Signal Acquisition & Analog Conditioning Frontend -->
+            <article class="project-full-card gsap-reveal" data-category="biomed embedded">
+              <div class="project-card-header">
+                <div class="project-meta-badges">
+                  <span class="badge badge-accent">Instrumentation</span>
+                  <span class="badge badge-outline">Lab Research</span>
+                  <span class="badge badge-category">Analog & Bio-Sensors</span>
+                </div>
+                <h3 class="project-title">
+                  Biomedical Signal Conditioning & Filter Front-End
+                </h3>
+                <p class="project-subtitle">
+                  Low-noise analog instrumentation amplifier circuit with active bandpass filtering and 50Hz notch rejection for physiological signals.
+                </p>
+              </div>
+
+              <div class="project-card-body">
+                <div class="project-card-info">
+                  <h4 class="info-block-heading"><i data-lucide="activity"></i> Circuit Architecture & Filter Design</h4>
+                  <ul class="project-features-list">
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>High CMRR Instrumentation Stage:</strong> Instrumentation op-amp stage providing &gt;100dB Common Mode Rejection to eliminate powerline interference and body ground loop noise.
+                      </div>
+                    </li>
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Active Butterworth Bandpass Stage:</strong> Dual-stage active filtering tailored for specific biomedical frequency bands (0.5Hz - 150Hz for muscle/heart bio-potentials).
+                      </div>
+                    </li>
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Simulation & Verification:</strong> Validated through circuit simulation in Proteus with FFT frequency response analysis before PCB prototyping.
+                      </div>
+                    </li>
+                  </ul>
+
+                  <div class="tech-stack-row">
+                    <span class="tech-tag"><i data-lucide="zap"></i> Instrumentation Op-Amps</span>
+                    <span class="tech-tag"><i data-lucide="activity"></i> Active Filters</span>
+                    <span class="tech-tag"><i data-lucide="layers"></i> Proteus Simulation</span>
+                    <span class="tech-tag"><i data-lucide="shield-check"></i> 50Hz Notch Filter</span>
+                  </div>
+                </div>
+
+                <div class="project-card-preview">
+                  <div class="circuit-scope-box">
+                    <div class="scope-box-header">
+                      <span class="mono-text">FFT / FREQUENCY SPECTRUM (0.1 - 200 Hz)</span>
+                      <span class="badge-tag">CLEAN SIGNAL</span>
+                    </div>
+                    <div class="scope-canvas-container">
+                      <canvas id="filterScopeCanvas" width="340" height="140"></canvas>
+                    </div>
+                    <div class="scope-stats-bar">
+                      <span>Gain: <strong>+60 dB</strong></span>
+                      <span>CMRR: <strong>104 dB</strong></span>
+                      <span>Passband: <strong>0.5 - 150 Hz</strong></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </article>
+
+            <!-- PROJECT 4: Microcontroller Architecture & Firmware Lab -->
+            <article class="project-full-card gsap-reveal" data-category="embedded">
+              <div class="project-card-header">
+                <div class="project-meta-badges">
+                  <span class="badge badge-accent">Embedded Systems</span>
+                  <span class="badge badge-outline">Completed</span>
+                  <span class="badge badge-category">Microcontrollers</span>
+                </div>
+                <h3 class="project-title">
+                  Multi-Arch Embedded Automation & 8051 Assembly Architecture
+                </h3>
+                <p class="project-subtitle">
+                  Systematic firmware development across 8051 Assembly, AVR, and 32-bit RISC microcontrollers exploring timers, interrupts, and serial communication protocols.
+                </p>
+              </div>
+
+              <div class="project-card-body">
+                <div class="project-card-info">
+                  <h4 class="info-block-heading"><i data-lucide="binary"></i> Firmware Engineering Highlights</h4>
+                  <ul class="project-features-list">
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Low-Level Assembly Control:</strong> Engineered register-level control, timer interrupt routines, and cycle-exact delay loops in 8051 assembly.
+                      </div>
+                    </li>
+                    <li>
+                      <i data-lucide="check-circle-2" class="list-ico"></i>
+                      <div>
+                        <strong>Peripheral Protocol Interfacing:</strong> Implemented hardware and bit-banged I2C, SPI, and UART drivers for real-time sensor communications.
+                      </div>
+                    </li>
+                  </ul>
+
+                  <div class="tech-stack-row">
+                    <span class="tech-tag"><i data-lucide="binary"></i> 8051 Assembly</span>
+                    <span class="tech-tag"><i data-lucide="code-2"></i> Embedded C</span>
+                    <span class="tech-tag"><i data-lucide="clock"></i> Hardware Interrupts</span>
+                    <span class="tech-tag"><i data-lucide="radio"></i> UART / I2C / SPI</span>
+                  </div>
+                </div>
+
+                <div class="project-card-preview">
+                  <div class="code-terminal-box">
+                    <div class="terminal-bar">
+                      <span class="term-dot red"></span>
+                      <span class="term-dot yellow"></span>
+                      <span class="term-dot green"></span>
+                      <span class="term-file mono-text">esp32_imu_fusion.c</span>
+                    </div>
+                    <pre class="terminal-code"><code><span class="c-keyword">#include</span> <span class="c-str">&lt;Wire.h&gt;</span>
+<span class="c-keyword">#include</span> <span class="c-str">&lt;ESP32_BioTelemetry.h&gt;</span>
+
+<span class="c-type">void</span> <span class="c-func">calculate_joint_rom</span>(<span class="c-type">float</span> ax, <span class="c-type">float</span> ay, <span class="c-type">float</span> az) {
+  <span class="c-type">float</span> pitch = atan2(ay, sqrt(ax*ax + az*az)) * <span class="c-num">180.0</span> / PI;
+  <span class="c-type">float</span> filtered_angle = alpha * (prev_angle + gz * dt) + (<span class="c-num">1.0</span> - alpha) * pitch;
+  <span class="c-func">transmit_ble_telemetry</span>(filtered_angle);
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+            </article>
+
           </div>
         </div>
+      </section>
 
-        <div class="hero-visual">
-          <div class="orb orb-a parallax" data-speed="0.18"></div>
-          <div class="orb orb-b parallax" data-speed="-0.14"></div>
-          <figure class="profile-frame reveal parallax tilt-card" data-reveal="up" data-delay="0.12" data-speed="0.08">
-            <img src="./Profile.jpeg" alt="Portrait of Anugraha Siju" class="profile-image">
-          </figure>
-          <div class="grid-card card-primary reveal parallax tilt-card" data-reveal="right" data-delay="0.2" data-speed="0.12">
-            <span>Current Focus</span>
-            <strong>Physiotherapy Tracking with ESP32 + Sensors</strong>
-            <p>Turning range-of-motion and exercise data into visual, actionable rehabilitation feedback.</p>
+      <!-- ========================================================
+           SECTION: Interactive Rehabilitation Telemetry Sandbox
+           ======================================================== -->
+      <section class="section-block sandbox-section" id="sandbox">
+        <div class="section-container">
+          <div class="section-header gsap-reveal">
+            <div class="section-subtitle-tag">
+              <i data-lucide="activity"></i>
+              <span>INTERACTIVE REHABILITATION SIMULATOR</span>
+            </div>
+            <h2 class="section-title">Rehabilitation Telemetry Sandbox</h2>
+            <p class="section-description">
+              Test the live sensor kinematics calculation algorithm. Interact with the joint angle slider to see real-time filtering, angular velocity computation, repetition counting, and biofeedback warnings.
+            </p>
           </div>
-          <div class="grid-card card-secondary reveal parallax tilt-card" data-reveal="left" data-delay="0.34" data-speed="-0.1">
-            <span>Discipline Stack</span>
-            <strong>Embedded + Biomedical</strong>
-            <p>From circuit logic and firmware fundamentals to healthcare-oriented instrumentation thinking.</p>
+
+          <div class="sandbox-wrapper gsap-reveal">
+            <!-- Sandbox Controls & Joint Manipulator -->
+            <div class="sandbox-controls-panel">
+              <div class="panel-tag-header">
+                <span class="tag-title">KINEMATIC CONTROLLER</span>
+                <button class="btn-text-sm" id="resetSandboxBtn"><i data-lucide="rotate-ccw"></i> Reset Counters</button>
+              </div>
+
+              <!-- Joint Selection Tabs -->
+              <div class="control-group">
+                <label class="control-label" for="jointSelector">Select Target Rehabilitation Joint:</label>
+                <div class="joint-tabs" id="jointSelector">
+                  <button class="joint-tab active" data-joint="elbow" data-min="0" data-max="145" data-ideal="130">
+                    <i data-lucide="chevrons-up-down"></i>
+                    <span>Elbow Flexion (0° - 145°)</span>
+                  </button>
+                  <button class="joint-tab" data-joint="knee" data-min="0" data-max="135" data-ideal="120">
+                    <i data-lucide="activity"></i>
+                    <span>Knee Extension (0° - 135°)</span>
+                  </button>
+                  <button class="joint-tab" data-joint="shoulder" data-min="0" data-max="180" data-ideal="160">
+                    <i data-lucide="arrow-up-circle"></i>
+                    <span>Shoulder Abduction (0° - 180°)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Interactive Slider -->
+              <div class="control-group">
+                <div class="slider-header-row">
+                  <label for="jointAngleSlider" class="control-label">Live Joint Flexion Angle:</label>
+                  <span class="live-slider-display mono-text" id="liveAngleDisplay">65°</span>
+                </div>
+                <input
+                  type="range"
+                  id="jointAngleSlider"
+                  min="0"
+                  max="145"
+                  value="65"
+                  class="custom-range-slider"
+                  aria-label="Joint Flexion Angle Slider"
+                >
+                <div class="slider-ticks">
+                  <span>0° (Full Ext)</span>
+                  <span id="sliderMidTick">72.5°</span>
+                  <span id="sliderMaxTick">145° (Target Flex)</span>
+                </div>
+              </div>
+
+              <!-- Auto-Simulator Toggle -->
+              <div class="control-group sim-auto-row">
+                <button class="btn btn-primary btn-sm" id="toggleAutoSimBtn">
+                  <i data-lucide="play" id="autoSimIcon"></i>
+                  <span id="autoSimText">Start Auto Exercise Routine</span>
+                </button>
+                <div class="noise-toggle">
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="noiseToggle" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                  <span class="toggle-lbl">Simulate Sensor Noise & Drift</span>
+                </div>
+              </div>
+
+              <!-- Live Status Alert Box -->
+              <div class="sandbox-feedback-box" id="feedbackBox">
+                <div class="fb-icon" id="fbIcon"><i data-lucide="check-circle"></i></div>
+                <div class="fb-text">
+                  <strong id="fbHeading">Exercise Motion in Optimal Range</strong>
+                  <p id="fbMessage">Steady angular progression. Velocity within clinical safety limits (&lt;120°/s).</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sandbox Live Visualizer Stage -->
+            <div class="sandbox-stage-panel">
+              <div class="stage-header-row">
+                <div class="stage-stats">
+                  <div class="s-stat">
+                    <span class="s-label">REPETITIONS</span>
+                    <span class="s-num mono-text text-accent" id="repCount">0</span>
+                  </div>
+                  <div class="s-stat">
+                    <span class="s-label">MAX ROM REACHED</span>
+                    <span class="s-num mono-text" id="maxRom">65°</span>
+                  </div>
+                  <div class="s-stat">
+                    <span class="s-label">SMOOTHNESS</span>
+                    <span class="s-num mono-text text-accent" id="smoothnessScore">98%</span>
+                  </div>
+                </div>
+                <div class="stage-fps mono-text">
+                  <span class="fps-dot"></span> 60 FPS
+                </div>
+              </div>
+
+              <!-- Visual Biomechanical Joint Canvas -->
+              <div class="biomech-canvas-wrap">
+                <canvas id="biomechCanvas" width="480" height="260"></canvas>
+              </div>
+
+              <!-- Real-time Kinematic Scope Chart -->
+              <div class="telemetry-chart-wrap">
+                <div class="chart-label-row">
+                  <span class="mono-text">// TELEMETRY WAVEFORM: DEG / TIME</span>
+                  <span class="mono-text" id="chartVelDisplay">Velocity: 0.0 °/s</span>
+                </div>
+                <canvas id="telemetryChartCanvas" width="480" height="90"></canvas>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="section" id="about">
-        <div class="section-heading">
-          <p class="eyebrow">Profile</p>
-          <h2>Professional, technical, and built for impact.</h2>
-        </div>
-        <div class="about-grid">
-          <article class="panel reveal tilt-card scroll-motion" data-reveal="left" data-delay="0.12" data-scroll="left">
-            <h3>What I work on</h3>
-            <p>
-              My work is centered on biomedical electronics, embedded systems, and interfaces that make technical data
-              useful for people. I am particularly drawn to rehabilitation technology where sensors, signal processing,
-              and intuitive visual feedback can directly improve outcomes.
+      <!-- ========================================================
+           SECTION: Technical Skills & Interactive Matrix
+           ======================================================== -->
+      <section class="section-block" id="skills">
+        <div class="section-container">
+          <div class="section-header gsap-reveal">
+            <div class="section-subtitle-tag">
+              <i data-lucide="binary"></i>
+              <span>CAPABILITIES & MATRIX</span>
+            </div>
+            <h2 class="section-title">Technical Expertise & Engineering Stack</h2>
+            <p class="section-description">
+              Multi-disciplinary mastery spanning embedded firmware, biomedical instrumentation, analog circuits, and collaborative leadership.
             </p>
-          </article>
-          <article class="panel reveal tilt-card scroll-motion" data-reveal="right" data-delay="0.2" data-scroll="right">
-            <h3>How I operate</h3>
-            <p>
-              I combine strong academics with structured teamwork, technical documentation, and event leadership.
-              That mix helps me move from concept to execution while staying clear on communication, timelines,
-              and practical delivery.
+          </div>
+
+          <div class="skills-grid-wrapper">
+
+            <!-- Skill Group 1: Embedded & Hardware -->
+            <div class="skill-category-card gsap-reveal">
+              <div class="skill-cat-header">
+                <div class="cat-icon-wrap cat-embedded">
+                  <i data-lucide="cpu"></i>
+                </div>
+                <div>
+                  <h3 class="skill-cat-title">Embedded Systems & Hardware</h3>
+                  <span class="skill-cat-sub">Firmware, Microcontrollers & Telemetry</span>
+                </div>
+              </div>
+
+              <div class="skill-bars-list">
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">ESP32 / ESP8266 Architecture</span>
+                    <span class="skill-pct">92%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 92%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Embedded C & C++</span>
+                    <span class="skill-pct">88%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 88%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">8051 Assembly & Register Control</span>
+                    <span class="skill-pct">85%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 85%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Circuit Simulation (Proteus, Multisim)</span>
+                    <span class="skill-pct">90%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 90%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">PCB Layout & Schematic Design</span>
+                    <span class="skill-pct">82%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 82%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="skill-tags-cloud">
+                <span class="cloud-tag">UART</span>
+                <span class="cloud-tag">I2C</span>
+                <span class="cloud-tag">SPI</span>
+                <span class="cloud-tag">Timers & ISR</span>
+                <span class="cloud-tag">BLE 4.2</span>
+                <span class="cloud-tag">Python Scripting</span>
+              </div>
+            </div>
+
+            <!-- Skill Group 2: Biomedical & Instrumentation -->
+            <div class="skill-category-card gsap-reveal">
+              <div class="skill-cat-header">
+                <div class="cat-icon-wrap cat-biomed">
+                  <i data-lucide="heart-pulse"></i>
+                </div>
+                <div>
+                  <h3 class="skill-cat-title">Biomedical & Sensors</h3>
+                  <span class="skill-cat-sub">Instrumentation, Kinematics & Biosignals</span>
+                </div>
+              </div>
+
+              <div class="skill-bars-list">
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Biomedical Instrumentation Systems</span>
+                    <span class="skill-pct">90%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 90%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Biosensors & Transducers (IMU, EMG, PPG)</span>
+                    <span class="skill-pct">88%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 88%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Analog Signal Conditioning & Filtering</span>
+                    <span class="skill-pct">86%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 86%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Rehabilitation Kinematics Tracking</span>
+                    <span class="skill-pct">94%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 94%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Medical Imaging Principles (CT, MRI, US)</span>
+                    <span class="skill-pct">84%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 84%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="skill-tags-cloud">
+                <span class="cloud-tag">CMRR Optimization</span>
+                <span class="cloud-tag">Kinematic Calibration</span>
+                <span class="cloud-tag">Diagnostic Devices</span>
+                <span class="cloud-tag">ADC Sampling</span>
+              </div>
+            </div>
+
+            <!-- Skill Group 3: Leadership & Communication -->
+            <div class="skill-category-card gsap-reveal">
+              <div class="skill-cat-header">
+                <div class="cat-icon-wrap cat-leadership">
+                  <i data-lucide="users"></i>
+                </div>
+                <div>
+                  <h3 class="skill-cat-title">Leadership & Professional Execution</h3>
+                  <span class="skill-cat-sub">Execution, Strategy & Communication</span>
+                </div>
+              </div>
+
+              <div class="skill-bars-list">
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Technical Documentation & Research Writing</span>
+                    <span class="skill-pct">95%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 95%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Symposium & Event Management</span>
+                    <span class="skill-pct">92%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 92%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Engineering Team Leadership</span>
+                    <span class="skill-pct">90%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 90%;"></div>
+                  </div>
+                </div>
+
+                <div class="skill-bar-item">
+                  <div class="skill-info-row">
+                    <span class="skill-name">Public Speaking & Technical Pitching</span>
+                    <span class="skill-pct">88%</span>
+                  </div>
+                  <div class="skill-progress-track">
+                    <div class="skill-progress-fill" style="--skill-w: 88%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="skill-tags-cloud">
+                <span class="cloud-tag">Agile Methodologies</span>
+                <span class="cloud-tag">Stakeholder Communication</span>
+                <span class="cloud-tag">Peer Mentorship</span>
+              </div>
+            </div>
+
+            <!-- Skill Group 4: Verified Certifications -->
+            <div class="skill-category-card certs-card gsap-reveal">
+              <div class="skill-cat-header">
+                <div class="cat-icon-wrap cat-certs">
+                  <i data-lucide="badge-check"></i>
+                </div>
+                <div>
+                  <h3 class="skill-cat-title">Verified Certifications</h3>
+                  <span class="skill-cat-sub">Recognized Industry Credentials</span>
+                </div>
+              </div>
+
+              <div class="certs-list">
+                <div class="cert-item">
+                  <div class="cert-badge-ico"><i data-lucide="award"></i></div>
+                  <div class="cert-details">
+                    <span class="cert-org">NASSCOM / FutureSkills Prime</span>
+                    <strong class="cert-name">Digital 101 (30 Hours Course)</strong>
+                    <span class="cert-desc">Foundation in emerging digital systems, computing frameworks, and technology convergence.</span>
+                  </div>
+                </div>
+
+                <div class="cert-item">
+                  <div class="cert-badge-ico"><i data-lucide="award"></i></div>
+                  <div class="cert-details">
+                    <span class="cert-org">Udemy</span>
+                    <strong class="cert-name">Master in Agile HR & People Operations</strong>
+                    <span class="cert-desc">Comprehensive frameworks for cross-functional collaboration, agile sprints, and operational efficiency.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECTION: Leadership & Interactive Timeline
+           ======================================================== -->
+      <section class="section-block" id="leadership">
+        <div class="section-container">
+          <div class="section-header gsap-reveal">
+            <div class="section-subtitle-tag">
+              <i data-lucide="sparkles"></i>
+              <span>LEADERSHIP JOURNEY</span>
+            </div>
+            <h2 class="section-title">Roles, Responsibilities & Initiatives</h2>
+            <p class="section-description">
+              Steering engineering executive bodies, mentoring student developers, and curating state-level technical symposiums.
             </p>
-          </article>
+          </div>
+
+          <div class="timeline-container">
+            <div class="timeline-spine"></div>
+
+            <!-- Timeline Item 1 -->
+            <div class="timeline-entry gsap-reveal">
+              <div class="timeline-node">
+                <div class="node-inner"></div>
+              </div>
+              <div class="timeline-card">
+                <div class="timeline-header">
+                  <div>
+                    <span class="timeline-period mono-text">2026 - 2027</span>
+                    <h3 class="timeline-role-title">Content Co-Lead • IEEE Executive Committee</h3>
+                    <span class="timeline-org">IEEE Student Branch • Adi Shankara</span>
+                  </div>
+                  <div class="timeline-org-badge">IEEE</div>
+                </div>
+                <p class="timeline-body-text">
+                  Spearheading the technical content lifecycle, publicity campaigns, and curriculum design for state-level engineering workshops, hackathons, and technology symposiums. Acting as the core editorial bridge between the executive committee, student developers, and keynote speakers.
+                </p>
+                <div class="timeline-tags">
+                  <span class="t-tag">Technical Curation</span>
+                  <span class="t-tag">Symposium Organizing</span>
+                  <span class="t-tag">Executive Governance</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="timeline-entry gsap-reveal">
+              <div class="timeline-node">
+                <div class="node-inner"></div>
+              </div>
+              <div class="timeline-card">
+                <div class="timeline-header">
+                  <div>
+                    <span class="timeline-period mono-text">2026 - 2027</span>
+                    <h3 class="timeline-role-title">Joint Secretary • Biomedical Engineering Society</h3>
+                    <span class="timeline-org">Biomedical Engineering Society of India (BMESI)</span>
+                  </div>
+                  <div class="timeline-org-badge">BMESI</div>
+                </div>
+                <p class="timeline-body-text">
+                  Orchestrated biomedical tech fests, inter-college bio-instrumentation competitions, and clinician-student interface panels to bridge practical hospital instrumentation challenges with student engineering solutions.
+                </p>
+                <div class="timeline-tags">
+                  <span class="t-tag">Healthcare Panels</span>
+                  <span class="t-tag">Fest Coordination</span>
+                  <span class="t-tag">Industry Relations</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
-      <section class="section" id="projects">
-        <div class="section-heading">
-          <p class="eyebrow">Projects</p>
-          <h2>Rehabilitation technology with embedded intelligence.</h2>
-        </div>
-        <div class="project-grid">
-          <article class="project-card panel reveal tilt-card scroll-motion" data-reveal="left" data-delay="0.12" data-scroll="left">
-            <div class="project-tag">In Progress</div>
-            <h3>ESP32-Based Quantitative Physiotherapy Progress Tracker</h3>
-            <p>
-              A sensor-driven system designed to quantify rehabilitation progress by measuring joint movement,
-              range of motion, and performance trends in real time.
+      <!-- ========================================================
+           SECTION: Education & Academic Pedigree
+           ======================================================== -->
+      <section class="section-block" id="education">
+        <div class="section-container">
+          <div class="section-header gsap-reveal">
+            <div class="section-subtitle-tag">
+              <i data-lucide="graduation-cap"></i>
+              <span>ACADEMIC FOUNDATION</span>
+            </div>
+            <h2 class="section-title">Education & Academic Distinctions</h2>
+            <p class="section-description">
+              Demonstrated scholastic distinction from secondary education through advanced engineering studies.
             </p>
-            <ul>
-              <li>Tracks physiotherapy progress through ESP32-based sensing workflows.</li>
-              <li>Measures movement quality and range of motion from live sensor input.</li>
-              <li>Processes rehabilitation data into meaningful performance indicators.</li>
-              <li>Designs a visual interface to present progress clearly to users and evaluators.</li>
-            </ul>
-          </article>
+          </div>
 
-          <article class="project-card panel reveal tilt-card scroll-motion" data-reveal="right" data-delay="0.2" data-scroll="right">
-            <div class="project-tag">In Progress</div>
-            <h3>ESP32-Based Rehabilitation Exercise Monitoring Device</h3>
-            <p>
-              A device concept for monitoring physiotherapy exercises using embedded hardware and sensor integration,
-              aimed at making rehabilitation sessions more trackable and consistent.
+          <div class="education-cards-grid">
+            <!-- College -->
+            <div class="edu-card edu-primary gsap-reveal">
+              <div class="edu-card-top">
+                <div class="edu-icon"><i data-lucide="graduation-cap"></i></div>
+                <div class="edu-badge">Undergraduate Degree</div>
+              </div>
+              <h3 class="edu-degree">BTech in Electronics and Biomedical Engineering</h3>
+              <div class="edu-institution">Adi Shankara Institute of Engineering & Technology</div>
+              <div class="edu-univ">APJ Abdul Kalam Technological University (KTU), Kerala</div>
+              <div class="edu-score-box">
+                <span class="score-label">Current CGPA</span>
+                <span class="score-number mono-text">8.93 <small>/ 10.0</small></span>
+              </div>
+              <p class="edu-summary">
+                Specializing in medical instrumentation, embedded hardware architectures, biosignal processing, linear integrated circuits, and microcontroller systems.
+              </p>
+            </div>
+
+            <!-- Higher Secondary -->
+            <div class="edu-card gsap-reveal">
+              <div class="edu-card-top">
+                <div class="edu-icon"><i data-lucide="book-open"></i></div>
+                <div class="edu-badge">Higher Secondary</div>
+              </div>
+              <h3 class="edu-degree">Higher Secondary Education (Science / Bio-Maths)</h3>
+              <div class="edu-institution">GHSS, Edathala</div>
+              <div class="edu-univ">General Education Department, Kerala</div>
+              <div class="edu-score-box">
+                <span class="score-label">Final Board Percentage</span>
+                <span class="score-number mono-text">99.08%</span>
+              </div>
+              <p class="edu-summary">
+                State-level academic distinction with near-perfect marks in Physics, Chemistry, Biology, and Mathematics.
+              </p>
+            </div>
+
+            <!-- High School -->
+            <div class="edu-card gsap-reveal">
+              <div class="edu-card-top">
+                <div class="edu-icon"><i data-lucide="school"></i></div>
+                <div class="edu-badge">Secondary School</div>
+              </div>
+              <h3 class="edu-degree">Secondary School Leaving Certificate (SSLC)</h3>
+              <div class="edu-institution">Hail Mary E.M.R.H.S.S, Perumpilly</div>
+              <div class="edu-univ">Board of Public Examination, Kerala</div>
+              <div class="edu-score-box">
+                <span class="score-label">Board Percentage</span>
+                <span class="score-number mono-text">99.00%</span>
+              </div>
+              <p class="edu-summary">
+                Graduated with top academic honors and consistent distinction in STEM and language subjects.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECTION: Direct Connect & Contact Hub
+           ======================================================== -->
+      <section class="section-block contact-section" id="contact">
+        <div class="section-container">
+          <div class="section-header text-center gsap-reveal">
+            <div class="section-subtitle-tag">
+              <i data-lucide="send"></i>
+              <span>GET IN TOUCH</span>
+            </div>
+            <h2 class="section-title">Let's Build Systems That Matter</h2>
+            <p class="section-description mx-auto">
+              Whether you are looking for an ambitious engineering intern, a biomedical hardware researcher, or want to collaborate on smart rehabilitation devices, I'd love to connect.
             </p>
-            <ul>
-              <li>Uses ESP32 and sensors to observe exercise performance in structured routines.</li>
-              <li>Targets practical monitoring for rehabilitation-focused use cases.</li>
-              <li>Built around dependable data capture and device usability.</li>
-            </ul>
-          </article>
+          </div>
+
+          <div class="contact-hub-wrapper gsap-reveal">
+            <!-- Left: Direct Contact Channels & Quick Copy -->
+            <div class="contact-info-panel">
+              <h3 class="contact-panel-title">Direct Communication Channels</h3>
+              <p class="contact-panel-desc">
+                Feel free to reach out directly via email, phone, or LinkedIn. I typically respond within 24 hours.
+              </p>
+
+              <div class="contact-cards-stack">
+                <!-- Email Card with Copy Button -->
+                <div class="contact-method-card">
+                  <div class="method-icon"><i data-lucide="mail"></i></div>
+                  <div class="method-info">
+                    <span class="method-label">Official Email</span>
+                    <a href="mailto:anugrahasiju11@gmail.com" class="method-value">anugrahasiju11@gmail.com</a>
+                  </div>
+                  <button
+                    class="copy-btn icon-btn"
+                    data-copy="anugrahasiju11@gmail.com"
+                    title="Copy email to clipboard"
+                    aria-label="Copy email"
+                  >
+                    <i data-lucide="copy"></i>
+                  </button>
+                </div>
+
+                <!-- Phone Card with Copy Button -->
+                <div class="contact-method-card">
+                  <div class="method-icon"><i data-lucide="phone"></i></div>
+                  <div class="method-info">
+                    <span class="method-label">Phone & WhatsApp</span>
+                    <a href="tel:+919037790898" class="method-value">+91 9037790898</a>
+                  </div>
+                  <button
+                    class="copy-btn icon-btn"
+                    data-copy="+919037790898"
+                    title="Copy phone to clipboard"
+                    aria-label="Copy phone number"
+                  >
+                    <i data-lucide="copy"></i>
+                  </button>
+                </div>
+
+                <!-- Location Card -->
+                <div class="contact-method-card">
+                  <div class="method-icon"><i data-lucide="map-pin"></i></div>
+                  <div class="method-info">
+                    <span class="method-label">Current Base</span>
+                    <span class="method-value">Aluva / Kochi, Kerala, India</span>
+                  </div>
+                </div>
+
+                <!-- LinkedIn Card -->
+                <div class="contact-method-card">
+                  <div class="method-icon"><i data-lucide="linkedin"></i></div>
+                  <div class="method-info">
+                    <span class="method-label">LinkedIn Network</span>
+                    <a href="https://www.linkedin.com/in/anugraha-siju/" target="_blank" rel="noreferrer" class="method-value">linkedin.com/in/anugraha-siju</a>
+                  </div>
+                  <a href="https://www.linkedin.com/in/anugraha-siju/" target="_blank" rel="noreferrer" class="icon-btn" aria-label="Open LinkedIn">
+                    <i data-lucide="external-link"></i>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Download CV CTA Box -->
+              <div class="resume-download-card">
+                <div class="res-icon"><i data-lucide="file-check"></i></div>
+                <div class="res-text">
+                  <strong>Looking for a full offline CV?</strong>
+                  <span>Download the latest 2-page detailed engineering curriculum vitae.</span>
+                </div>
+                <a href="./AnugrahaSiju_CV_2ndYear%20(2).pdf" download="Anugraha_Siju_CV.pdf" class="btn btn-primary btn-sm">
+                  <i data-lucide="download"></i> Download PDF
+                </a>
+              </div>
+            </div>
+
+            <!-- Right: Interactive Quick Message Dispatcher -->
+            <div class="contact-form-panel">
+              <h3 class="contact-panel-title">Send a Direct Message</h3>
+              <form id="contactForm" class="interactive-form" novalidate>
+                <div class="form-row-2">
+                  <div class="form-field">
+                    <label for="userName" class="form-label">Your Name <span class="required">*</span></label>
+                    <input type="text" id="userName" name="name" class="form-input" placeholder="e.g. Dr. Sarah Chen / John Doe" required>
+                    <span class="field-error" id="nameError"></span>
+                  </div>
+                  <div class="form-field">
+                    <label for="userEmail" class="form-label">Your Email <span class="required">*</span></label>
+                    <input type="email" id="userEmail" name="email" class="form-input" placeholder="e.g. sarah@lab.org" required>
+                    <span class="field-error" id="emailError"></span>
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="userSubject" class="form-label">Inquiry Purpose <span class="required">*</span></label>
+                  <select id="userSubject" name="subject" class="form-input form-select" required>
+                    <option value="" disabled selected>Select discussion subject...</option>
+                    <option value="Internship / Research Role">Internship or Research Opportunity</option>
+                    <option value="Rehabilitation Project Collaboration">Rehab Device / Hardware Collaboration</option>
+                    <option value="Academic or Speaking Engagement">Academic / Event Speaker Inquiry</option>
+                    <option value="General Engineering Chat">General Technical Conversation</option>
+                  </select>
+                  <span class="field-error" id="subjectError"></span>
+                </div>
+
+                <div class="form-field">
+                  <label for="userMessage" class="form-label">Message Details <span class="required">*</span></label>
+                  <textarea id="userMessage" name="message" rows="5" class="form-input form-textarea" placeholder="Describe your project, inquiry, or collaboration idea..." required></textarea>
+                  <span class="field-error" id="messageError"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-full" id="submitFormBtn">
+                  <i data-lucide="send"></i>
+                  <span>Dispatch Email Message</span>
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="section" id="leadership">
-        <div class="section-heading">
-          <p class="eyebrow">Leadership</p>
-          <h2>Leading teams, events, and technical communication.</h2>
-        </div>
-        <div class="timeline">
-          <article class="timeline-item panel reveal tilt-card scroll-motion" data-reveal="left" data-delay="0.12" data-scroll="left">
-            <div class="timeline-year">2026-27</div>
-            <div>
-              <h3>Core Member, IEEE Executive Committee</h3>
-              <p class="timeline-role">Content Co-Lead</p>
-              <p>Directed content strategy for technical fests and workshops while bridging committee communication with students.</p>
-            </div>
-          </article>
-          <article class="timeline-item panel reveal tilt-card scroll-motion" data-reveal="right" data-delay="0.2" data-scroll="right">
-            <div class="timeline-year">2026-27</div>
-            <div>
-              <h3>Joint Secretary, Biomedical Engineering Society of India</h3>
-              <p class="timeline-role">Student Leadership</p>
-              <p>Organized a large-scale technical fest and coordinated with healthcare professionals and industry experts.</p>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="education">
-        <div class="section-heading">
-          <p class="eyebrow">Education</p>
-          <h2>Strong academic foundation across engineering and school studies.</h2>
-        </div>
-        <div class="education-grid">
-          <article class="panel reveal tilt-card scroll-motion" data-reveal="up" data-delay="0.12" data-scroll="up">
-            <h3>BTech in Electronics and Biomedical Engineering</h3>
-            <p>APJ Abdul Kalam Technological University</p>
-            <p>Adi Shankara Institute of Engineering and Technology</p>
-            <strong>CGPA: 8.93</strong>
-          </article>
-          <article class="panel reveal tilt-card scroll-motion" data-reveal="up" data-delay="0.2" data-scroll="up">
-            <h3>Higher Secondary Education</h3>
-            <p>GHSS, Edathala</p>
-            <strong>Percentage: 99.08</strong>
-          </article>
-          <article class="panel reveal tilt-card scroll-motion" data-reveal="up" data-delay="0.28" data-scroll="up">
-            <h3>High School</h3>
-            <p>Hail Mary E.M.R.H.S.S, Perumpilly</p>
-            <strong>Percentage: 99</strong>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="skills">
-        <div class="section-heading">
-          <p class="eyebrow">Capabilities</p>
-          <h2>Technical range with a practical engineering mindset.</h2>
-        </div>
-        <div class="skills-layout">
-          <article class="panel reveal tilt-card scroll-motion" data-reveal="left" data-delay="0.12" data-scroll="left">
-            <h3>Technical Skills</h3>
-            <div class="chip-row">
-              <span>Circuit Design & Simulation</span>
-              <span>Microcontrollers</span>
-              <span>Embedded Systems</span>
-              <span>PCB Design</span>
-              <span>C</span>
-              <span>Python</span>
-              <span>8051 Assembly</span>
-            </div>
-          </article>
-          <article class="panel reveal tilt-card scroll-motion" data-reveal="right" data-delay="0.18" data-scroll="right">
-            <h3>Biomedical Skills</h3>
-            <div class="chip-row">
-              <span>Biomedical Instrumentation</span>
-              <span>Medical Imaging Basics</span>
-              <span>Biosensors</span>
-              <span>Diagnostic Tools</span>
-            </div>
-          </article>
-          <article class="panel reveal tilt-card scroll-motion" data-reveal="left" data-delay="0.24" data-scroll="left">
-            <h3>Professional Skills</h3>
-            <div class="chip-row">
-              <span>Technical Documentation</span>
-              <span>Event Management</span>
-              <span>Team Leadership</span>
-              <span>Public Speaking</span>
-            </div>
-          </article>
-          <article class="panel reveal tilt-card scroll-motion" data-reveal="right" data-delay="0.3" data-scroll="right">
-            <h3>Certificates</h3>
-            <div class="chip-row">
-              <span>Digital 101 (30 Hours) - NASSCOM</span>
-              <span>Master in Agile HR - Udemy</span>
-            </div>
-          </article>
-        </div>
-      </section>
     </main>
 
-    <footer class="footer" id="contact">
-      <div>
-        <p class="eyebrow">Contact</p>
-        <h2>Let's build systems that matter.</h2>
-      </div>
-      <div class="contact-list">
-        <a href="tel:+919037790898">+91 9037790898</a>
-        <a href="mailto:anugrahasiju11@gmail.com">anugrahasiju11@gmail.com</a>
-        <span>Aluva, Kerala</span>
-        <a href="https://www.linkedin.com/in/anugraha-siju/" target="_blank" rel="noreferrer">linkedin.com/in/anugraha-siju</a>
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div class="footer-brand-row">
+          <div class="footer-logo">
+            <span class="brand-hexagon">
+              <span class="brand-initials">AS</span>
+            </span>
+            <div>
+              <strong class="footer-name">Anugraha Siju</strong>
+              <p class="footer-subtitle">Electronics & Biomedical Engineering • Class of 2028</p>
+            </div>
+          </div>
+          <div class="footer-nav-links">
+            <a href="#hero">Top</a>
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#sandbox">Sandbox</a>
+            <a href="#skills">Skills</a>
+            <a href="#leadership">Leadership</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </div>
+
+        <div class="footer-bottom-row">
+          <p class="footer-copy">
+            &copy; 2026 Anugraha Siju. Designed & Built with precision for biomedical & embedded impact.
+          </p>
+          <div class="footer-social-icons">
+            <a href="https://www.linkedin.com/in/anugraha-siju/" target="_blank" rel="noreferrer" title="LinkedIn" aria-label="LinkedIn">
+              <i data-lucide="linkedin"></i>
+            </a>
+            <a href="mailto:anugrahasiju11@gmail.com" title="Email Anugraha" aria-label="Email">
+              <i data-lucide="mail"></i>
+            </a>
+            <a href="tel:+919037790898" title="Call Anugraha" aria-label="Phone">
+              <i data-lucide="phone"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
+
+    <!-- Back to top floating button -->
+    <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top" title="Scroll to top">
+      <svg class="progress-ring" width="48" height="48">
+        <circle class="progress-ring-circle" stroke="currentColor" stroke-width="3" fill="transparent" r="21" cx="24" cy="24"/>
+      </svg>
+      <i data-lucide="arrow-up" class="btt-icon"></i>
+    </button>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
   </div>
 
-  <script src="./script.js"></script>
+  <!-- Main JavaScript Engine -->
+  <script src="./script.js?v=5.0"></script>
 </body>
 </html>
